@@ -22,14 +22,17 @@ class GetMeDownloader(AbstractDownloader):
             if total is None:
                 f.write(response.content)
             else:
-                downloaded = 0
-                total = int(total)
-                for data in response.iter_content(chunk_size=max(int(total / 1000), 1024 * 1024)):
-                    downloaded += len(data)
-                    f.write(data)
-                    done = int(50 * downloaded / total)
-                    sys.stdout.write('\r{}{}'.format('█' * done, '.' * (50 - done)))
-                    sys.stdout.flush()
+                try:
+                    downloaded = 0
+                    total = int(total)
+                    for data in response.iter_content(chunk_size=max(int(total / 1000), 1024 * 1024)):
+                        downloaded += len(data)
+                        f.write(data)
+                        done = int(50 * downloaded / total)
+                        sys.stdout.write('\r{}{}'.format('█' * done, '.' * (50 - done)))
+                        sys.stdout.flush()
+                except KeyboardInterrupt:
+                    GetMeLogger.log_and_abort('Interrupted download.')
         sys.stdout.write('\n')
         GetMeLogger.log_default('\n Finished.')
         return new_file_name

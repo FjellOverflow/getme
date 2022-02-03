@@ -22,5 +22,8 @@ class WgetDownloader(AbstractDownloader):
 
         GetMeLogger.log_default(f'Built wget-command: {bash_command}')
         process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-        process.communicate()
+        try:
+            process.communicate()
+        except KeyboardInterrupt:
+            GetMeLogger.log_and_abort('Interrupted download.')
         return new_file_name
