@@ -66,7 +66,7 @@ class FilePursuitAdapter(AbstractSourceAdapter):
             file_urls = self._parse_filepursuit_query_results(webpage)
             results.extend([GetMeQueryResult(u, self._translate_to_getme_query_type(query_type)) for u in file_urls])
 
-        GetMeLogger.log_default(f'Extracted {len(results)} for query.')
+        GetMeLogger.log_default(f'Extracted {len(results)} results for query.')
         return GetMeAggregatedQueryResults(query, results)
 
     @staticmethod
