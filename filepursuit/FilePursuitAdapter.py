@@ -5,17 +5,26 @@ from typing import Optional
 
 from bs4 import BeautifulSoup
 
+from data.AggregatedQueryResults import GetMeAggregatedQueryResults
+from data.QueryResult import GetMeQueryResult
 from util.Logger import GetMeLogger
 from abstract.AbstractSourceAdapter import AbstractSourceAdapter
-from data.Query import GetMeQuery, GetMeAggregatedQueryResults, GetMeQueryResult, GetMeQueryType
+from data.Query import GetMeQuery, GetMeQueryType
 
 FILEPURSUIT_QUERY_TYPES = ['all', 'video', 'audio', 'ebook', 'mobile', 'archive']
 
 
 class FilePursuitAdapter(AbstractSourceAdapter):
+    """Implements a source adapter for FilePursuit"""
 
     @staticmethod
     def _translate_to_filepursuit_query_types(getme_query_types: [GetMeQueryType]) -> [str]:
+        """
+        Matches native query-types with FilePursuit query types
+
+        :param getme_query_types: native query types
+        :return: matching FilePursuit query types
+        """
         filepursuit_query_types = []
         for getme_query_type in getme_query_types:
             if getme_query_type.value in FILEPURSUIT_QUERY_TYPES:
@@ -30,12 +39,24 @@ class FilePursuitAdapter(AbstractSourceAdapter):
 
     @staticmethod
     def _translate_to_getme_query_type(filepursuit_query_type: str) -> Optional[GetMeQueryType]:
+        """
+        Matches a FilePursiut query type with a native query type
+
+        :param filepursuit_query_type: FilePursuit query type
+        :return: a native query type if matched, else None
+        """
         try:
             return GetMeQueryType(filepursuit_query_type)
         except ValueError:
             return None
 
     def get_query_results(self, query: GetMeQuery) -> GetMeAggregatedQueryResults:
+        """
+        Fetches results for query from FilePursuit
+
+        :param query: the query to search for
+        :return: the FilePursuit results
+        """
         results = []
 
         filepursuit_query_types = self._translate_to_filepursuit_query_types(query.get_query_types())
@@ -50,6 +71,13 @@ class FilePursuitAdapter(AbstractSourceAdapter):
 
     @staticmethod
     def _build_file_pursuit_query(query: GetMeQuery, filepursuit_query_type) -> str:
+        """
+        Builds url to query FilePursuit
+
+        :param query: the query
+        :param filepursuit_query_type: the matched FilePursuit query types
+        :return: the built url
+        """
         base_url = 'https://filepursuit.com/pursuit?'
         param_sep = '&'
         string_sep = '+'
@@ -63,6 +91,12 @@ class FilePursuitAdapter(AbstractSourceAdapter):
 
     @staticmethod
     def _download_filepursuit_query_result(filepursuit_query_url: str) -> str:
+        """
+        Downloads the html of queried FilePursuit site
+
+        :param filepursuit_query_url: the FilePursuit url
+        :return: the html-content
+        """
         headers = {
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) '
                           'Chrome/23.0.1271.64 Safari/537.11'
@@ -75,6 +109,12 @@ class FilePursuitAdapter(AbstractSourceAdapter):
 
     @staticmethod
     def _parse_filepursuit_query_results(webpage: str) -> [str]:
+        """
+        Search FilePursuit html for potential results
+
+        :param webpage: FilePursuit html content
+        :return: list of extracted urls
+        """
         GetMeLogger.log_verbose('Extracting urls from webpage.')
         file_urls = []
 

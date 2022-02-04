@@ -1,36 +1,28 @@
-from typing import Optional
-
-from data.Query import GetMeQueryType, GetMeQuerySource, GetMeQuery, GetMeAggregatedQueryResults
+from data.AggregatedQueryResults import GetMeAggregatedQueryResults
+from data.Query import GetMeQueryType, GetMeQuerySource, GetMeQuery
 from filepursuit.FilePursuitAdapter import FilePursuitAdapter
 from util.Logger import GetMeLoggerMode, GetMeLogger
 
 
 class GetMeApi:
+    """Api to use GetMe"""
 
     def __init__(self, logger_mode=GetMeLoggerMode.DEFAULT):
+        """Sets up GetMe-API with logger"""
 
         GetMeLogger(logger_mode)
         GetMeLogger.log_verbose(f'Set up logger with mode {logger_mode.name}.')
 
     @staticmethod
-    def _extract_getme_query_types(query_types: [str]) -> [GetMeQueryType]:
-        getme_query_types = []
-        for query_type in query_types:
-            try:
-                getme_query_types.append(GetMeQueryType(query_type))
-            except ValueError:
-                continue
-        return getme_query_types
-
-    @staticmethod
-    def _extract_getme_source(source: str) -> Optional[GetMeQuerySource]:
-        try:
-            return GetMeQuerySource(source)
-        except ValueError:
-            return
-
-    @staticmethod
     def build_query(query: str, query_types: [GetMeQueryType], query_source: GetMeQuerySource):
+        """
+        Builds GetMeQuery from query, types and source
+
+        :param query: the string to search for
+        :param query_types: list of media-types to search for
+        :param query_source: source to search
+        :return:
+        """
 
         if not query or not query_types or not query_source:
             GetMeLogger.log_and_abort('Query options were malformed.')
@@ -44,6 +36,12 @@ class GetMeApi:
 
     @staticmethod
     def execute_query(query: GetMeQuery) -> [GetMeAggregatedQueryResults]:
+        """
+        Executes a query by the matching adapter for source
+
+        :param query: query to execute
+        :return: the results of the executed query
+        """
 
         adapter_matching = {
             GetMeQuerySource.GOOGLE: None,

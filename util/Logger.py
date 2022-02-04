@@ -12,6 +12,8 @@ class GetMeLoggerMode(enum.Enum):
 
 
 class GetMeLogger:
+    """Custom singleton-based logger for GetMe, with different verbosity levels"""
+
     class __GetMeLogger:
 
         def __init__(self, mode: GetMeLoggerMode):
@@ -40,20 +42,28 @@ class GetMeLogger:
 
     @staticmethod
     def log_verbose(message: str) -> None:
+        """Logs only in verbose-level"""
+
         if GetMeLogger.get_mode() is GetMeLoggerMode.VERBOSE:
             GetMeLogger._log(message)
 
     @staticmethod
     def log_default(message: str) -> None:
+        """Logs in verbose- and default-level"""
+
         if GetMeLogger.get_mode() is not GetMeLoggerMode.QUIET:
             GetMeLogger._log(message)
 
     @staticmethod
     def log_important(message: str) -> None:
+        """Logs on any level"""
+
         GetMeLogger._log(message)
 
     @staticmethod
     def log_and_exit(message: str) -> None:
+        """Logs in verbose- and default-level and exits"""
+
         if GetMeLogger.get_mode() is not GetMeLoggerMode.QUIET:
             GetMeLogger._log(message)
             GetMeLogger._log('Exiting.')
@@ -61,6 +71,8 @@ class GetMeLogger:
 
     @staticmethod
     def log_and_abort(message: str) -> None:
+        """Logs alway and exits with code 1"""
+
         GetMeLogger._log(message)
         GetMeLogger._log('Aborting.')
         sys.exit(1)

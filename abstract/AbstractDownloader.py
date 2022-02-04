@@ -1,18 +1,26 @@
 import abc
 from typing import Optional
 
+from data.AggregatedQueryResults import GetMeAggregatedQueryResults
+from data.QueryResult import GetMeQueryResult
 from util.Logger import GetMeLogger
-from data.Query import GetMeAggregatedQueryResults, GetMeQueryResult
 
 
 class AbstractDownloader(abc.ABC):
+    """Specifies class signature of a custom downloader"""
 
     @staticmethod
     def offer_downloads(query_results: GetMeAggregatedQueryResults) -> Optional[GetMeQueryResult]:
+        """
+        Present selection of all results for a query and allows selection of one result
+
+        :param query_results: all results to be presented
+        :return: the selected result, None if no result was selected
+        """
         GetMeLogger.log_verbose('Offering download options:\n')
 
         entry0 = '(0) Download nothing and exit'
-        placeholder = ' '*len(GetMeLogger.get_log_prefix())
+        placeholder = ' ' * len(GetMeLogger.get_log_prefix())
         entries = [f'{placeholder}({index + 1}) {item}' for index, item in enumerate(query_results.get_results())]
         entries.insert(0, entry0)
         GetMeLogger.log_important('\n'.join(entries))
@@ -28,4 +36,11 @@ class AbstractDownloader(abc.ABC):
     @staticmethod
     @abc.abstractmethod
     def download_file(download_file: GetMeQueryResult, new_file_name=None) -> str:
+        """
+        Method to be implemented by a custom downloader
+
+        :param download_file: a query result to be downloaded
+        :param new_file_name: the name under which the downloaded file is to be saved, optional
+        :return: the path of the downloaded file
+        """
         pass
