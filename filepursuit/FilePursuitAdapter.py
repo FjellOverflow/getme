@@ -58,19 +58,27 @@ class FilePursuitAdapter(AbstractSourceAdapter):
         :return: the FilePursuit results
         """
         results = []
+        max_results = query.get_max_number_results()
+        if not max_results:
+            max_results = 50
 
         filepursuit_query_types = self._translate_to_filepursuit_query_types(query.get_query_types())
         for query_type in filepursuit_query_types:
-            filepursuit_query = self._build_file_pursuit_query(query, query_type)
-            webpage = self._download_filepursuit_query_result(filepursuit_query)
-            file_urls = self._parse_filepursuit_query_results(webpage)
-            results.extend([GetMeQueryResult(u, self._translate_to_getme_query_type(query_type)) for u in file_urls])
+            start_row = 0
+            file_urls = []
+            while len(results) < max_results and (start_row == 0 or len(file_urls) == 50):
+                filepursuit_query = self._build_file_pursuit_query(query, query_type, start_row)
+                webpage = self._download_filepursuit_query_result(filepursuit_query)
+                file_urls = self._parse_filepursuit_query_results(webpage)
+                results.extend(
+                    [GetMeQueryResult(u, self._translate_to_getme_query_type(query_type)) for u in file_urls])
+                start_row += 50
 
         GetMeLogger.log_default(f'Extracted {len(results)} results for query.')
         return GetMeAggregatedQueryResults(query, results)
 
     @staticmethod
-    def _build_file_pursuit_query(query: GetMeQuery, filepursuit_query_type) -> str:
+    def _build_file_pursuit_query(query: GetMeQuery, filepursuit_query_type, start_row: int) -> str:
         """
         Builds url to query FilePursuit
 
@@ -83,9 +91,10 @@ class FilePursuitAdapter(AbstractSourceAdapter):
         string_sep = '+'
         param_query = 'q'
         param_type = 'type'
+        param_start_row = 'startrow'
         query_no_whitespaces = query.get_query().replace(' ', string_sep)
         filepursuit_url = f'{base_url}{param_query}={query_no_whitespaces}{param_sep}{param_type}=' \
-                          f'{filepursuit_query_type} '
+                          f'{filepursuit_query_type}{param_sep}{param_start_row}={start_row}'
         GetMeLogger.log_default(f'Built FilePursuit query-url: \"{filepursuit_url}\".')
         return filepursuit_url
 
