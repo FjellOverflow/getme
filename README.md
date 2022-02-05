@@ -83,7 +83,7 @@ results = api.execute_query(query)
 downloader = GetMeDownloader()
 
 # we download the 2nd result
-downloader.download_file(results[])
+downloader.download_file(results[0])
 ```
 
 ## Extensions
@@ -134,8 +134,7 @@ class MyCustomSourceAdapter(AbstractSourceAdapter):
 
 | Feature | Description | Internal component | External component | In progress |
 |- | - | - | - | - |
-| More results for FilePursuit| Fetch more than first page from FilePursuit | FilePursuitAdapter | [FilePursuit](https://filepursuit.com/) | [x] |
-| Implement Google source adapter | Search Google for files | New source adapter  | [Google](https://www.google.com/) |
+| Implement Google source adapter | Search Google for files | New source adapter  | [Google](https://www.google.com/) | Yes |
 | cUrl downloader | Download files with cUrl | Custom downloader | [cURL](https://curl.se/) |
 | Multisource adapter | Search multiple sources at once | New native component |
 | Filename parser | Extract proper filename from url | New native component |
