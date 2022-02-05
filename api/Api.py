@@ -14,13 +14,15 @@ class GetMeApi:
         GetMeLogger.log_verbose(f'Set up logger with mode {logger_mode.name}.')
 
     @staticmethod
-    def build_query(query: str, query_types: [GetMeQueryType], query_source: GetMeQuerySource):
+    def build_query(query: str, query_types: [GetMeQueryType], query_source: GetMeQuerySource,
+                    max_results=50) -> GetMeQuery:
         """
         Builds GetMeQuery from query, types and source
 
         :param query: the string to search for
         :param query_types: list of media-types to search for
         :param query_source: source to search
+        :param max_results: max number of results to search for
         :return:
         """
 
@@ -31,7 +33,7 @@ class GetMeApi:
             f'Received query \"{query}\" of type(s) [{", ".join([t.name for t in query_types])}] '
             f'for source {query_source.name}.')
 
-        query_object = GetMeQuery(query, query_types, query_source)
+        query_object = GetMeQuery(query, query_types, query_source, max_results)
         return query_object
 
     @staticmethod
