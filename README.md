@@ -134,7 +134,7 @@ class MyCustomSourceAdapter(AbstractSourceAdapter):
 
 | Feature | Description | Internal component | External component | In progress |
 |- | - | - | - | - |
-| More results for FilePursuit| Fetch more than first page from FilePursuit | FilePursuitAdapter | [FilePursuit](https://filepursuit.com/) | Yes |
+| More results for FilePursuit| Fetch more than first page from FilePursuit | FilePursuitAdapter | [FilePursuit](https://filepursuit.com/) | [x] |
 | Implement Google source adapter | Search Google for files | New source adapter  | [Google](https://www.google.com/) |
 | cUrl downloader | Download files with cUrl | Custom downloader | [cURL](https://curl.se/) |
 | Multisource adapter | Search multiple sources at once | New native component |
