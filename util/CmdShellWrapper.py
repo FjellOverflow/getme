@@ -20,7 +20,7 @@ GETME_INFO_MESSAGE = f'Usage: getme --query <query> [--source <source>] [-v, -a,
                      '      -q       (Optional) quiet - no non-essential logging \n' \
                      '      -f       (Optional) full - all logging enabled \n\n' \
                      '  OTHER \n' \
-                     '      -h       (Optional) help - pring this message'
+                     '      -h       (Optional) help - print this message'
 
 
 class GetMeCmdShellWrapper:
