@@ -53,7 +53,7 @@ class GetMeApi:
         if adapter:
             GetMeLogger.log_verbose(f'Matched adapter for source {query.get_query_source().name}.')
         else:
-            GetMeLogger.log_default(f'Adapter for source {query.get_query_source().name} not implemented yet.')
+            GetMeLogger.log_and_abort(f'Adapter for source {query.get_query_source().name} not implemented yet.')
 
         results = adapter().get_query_results(query)
         return results
