@@ -135,7 +135,6 @@ class MyCustomSourceAdapter(AbstractSourceAdapter):
 | Feature | Description | Internal component | External component | In progress |
 |- | - | - | - | - |
 | Implement Google source adapter | Search Google for files | New source adapter  | [Google](https://www.google.com/) | Yes |
-| cUrl downloader | Download files with cUrl | Custom downloader | [cURL](https://curl.se/) |
 | Multisource adapter | Search multiple sources at once | New native component |
 | Filename parser | Extract proper filename from url | New native component |
 | Server ratings | Rank/ blacklist/ avoid known servers when searching | Source adapters |
