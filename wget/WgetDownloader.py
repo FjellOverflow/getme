@@ -4,14 +4,18 @@ import sys
 
 from abstract.AbstractDownloader import AbstractDownloader
 from data.QueryResult import GetMeQueryResult
+from impl.GetMeFileNameResolver import GetMeSimpleFileNameResolver
 from util.Logger import GetMeLogger
 
 
 class WgetDownloader(AbstractDownloader):
     """A wget-based downloader"""
 
-    @staticmethod
-    def download_file(download_file: GetMeQueryResult, new_file_name=None) -> str:
+    def __init__(self, file_name_resolver=GetMeSimpleFileNameResolver):
+        super().__init__(file_name_resolver)
+        self.__file_name_resolver = file_name_resolver()
+
+    def download_file(self, download_file: GetMeQueryResult, new_file_name=None) -> str:
         """
         Downloads a file for a query result
 
@@ -25,7 +29,8 @@ class WgetDownloader(AbstractDownloader):
             sys.exit(1)
 
         if not new_file_name:
-            new_file_name = download_file.get_filename()
+            new_file_name = self.__file_name_resolver.resolve_file_name(download_file.get_filename())
+
         file_url = download_file.get_full_path()
         bash_command = f'wget -O {new_file_name} -c {file_url}'
 

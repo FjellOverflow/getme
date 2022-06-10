@@ -9,8 +9,10 @@ from util.Logger import GetMeLogger
 class AbstractDownloader(abc.ABC):
     """Specifies class signature of a custom downloader"""
 
-    @staticmethod
-    def offer_downloads(query_results: GetMeAggregatedQueryResults) -> Optional[GetMeQueryResult]:
+    def __init__(self, file_name_resolver: type):
+        self.__file_name_resolver = file_name_resolver()
+
+    def offer_downloads(self, query_results: GetMeAggregatedQueryResults) -> Optional[GetMeQueryResult]:
         """
         Present selection of all results for a query and allows selection of one result
 
@@ -33,9 +35,8 @@ class AbstractDownloader(abc.ABC):
             return
         return query_results.get_results()[selected_option - 1]
 
-    @staticmethod
     @abc.abstractmethod
-    def download_file(download_file: GetMeQueryResult, new_file_name=None) -> str:
+    def download_file(self, download_file: GetMeQueryResult, new_file_name=None) -> str:
         """
         Method to be implemented by a custom downloader
 

@@ -5,6 +5,7 @@ from api.Api import GetMeApi
 from data.Query import GetMeQuerySource, GetMeQueryType
 from impl.GetMeDownloader import GetMeDownloader
 from util.Logger import GetMeLoggerMode
+from wget.WgetDownloader import WgetDownloader
 
 GETME_INFO_MESSAGE = f'Usage: getme --query <query> [--source <source>] [-v, -a, -e, -q, -a]\n\n' \
                      '  QUERY \n' \
@@ -77,7 +78,7 @@ class GetMeCmdShellWrapper:
         getme_query = api.build_query(query, query_types, query_source)
         results = api.execute_query(getme_query)
 
-        downloader = GetMeDownloader()
+        downloader = WgetDownloader()
         chosen_file = downloader.offer_downloads(results)
         if chosen_file:
             downloader.download_file(chosen_file)

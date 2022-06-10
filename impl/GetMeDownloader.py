@@ -3,6 +3,7 @@ import sys
 import requests
 
 from data.QueryResult import GetMeQueryResult
+from impl.GetMeFileNameResolver import GetMeSimpleFileNameResolver
 from util.Logger import GetMeLogger
 from abstract.AbstractDownloader import AbstractDownloader
 
@@ -10,8 +11,11 @@ from abstract.AbstractDownloader import AbstractDownloader
 class GetMeDownloader(AbstractDownloader):
     """A natively implemented downloader"""
 
-    @staticmethod
-    def download_file(download_file: GetMeQueryResult, new_file_name=None) -> str:
+    def __init__(self, file_name_resolver=GetMeSimpleFileNameResolver):
+        super().__init__(file_name_resolver)
+        self.__file_name_resolver = file_name_resolver()
+
+    def download_file(self, download_file: GetMeQueryResult, new_file_name=None) -> str:
         """
         Downloads a file for a query result
 
@@ -22,7 +26,7 @@ class GetMeDownloader(AbstractDownloader):
         GetMeLogger.log_default(
             f'Downloading file {download_file.get_filename()} from {download_file.get_server_url()} ...\n')
         if not new_file_name:
-            new_file_name = download_file.get_filename()
+            new_file_name = self.__file_name_resolver.resolve_file_name(download_file.get_filename())
 
         with open(new_file_name, 'wb') as f:
             response = requests.get(download_file.get_full_path(), stream=True)
