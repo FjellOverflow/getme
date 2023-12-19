@@ -4,7 +4,7 @@
   <br>
 </h1>
 
-<h4 align="center">An open-directory command-line utility built with <a href="http://electron.atom.io" target="_blank">Python</a>.</h4>
+<h4 align="center">An open-directory command-line utility built with Python</h4>
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
@@ -45,7 +45,7 @@ Usage: getme --query <query> [--source <source>] [-v, -a, -e, -q, -a]
       -f       (Optional) full - all logging enabled
 
   OTHER
-      -h       (Optional) help - pring this message True
+      -h       (Optional) help - print this message
       
 # search FilePursuit for video-files named "Never gonna give you up"
 >> ./main.py -v --source filepursuit --query "Never gonna give you up"
@@ -83,7 +83,7 @@ results = api.execute_query(query)
 downloader = GetMeDownloader()
 
 # we download the 2nd result
-downloader.download_file(results[0])
+downloader.download_file(results[1])
 ```
 
 ## Extensions
